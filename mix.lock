@@ -1,0 +1,4 @@
+%{"edown": {:git, "https://github.com/uwiger/edown.git", "754be25f71a04099c83f3ffdff268e70beeb0021", [branch: "master"]},
+  "elixir_make": {:hex, :elixir_make, "0.4.0", "992f38fabe705bb45821a728f20914c554b276838433349d4f2341f7a687cddf", [:mix], [], "hexpm"},
+  "fqc": {:git, "https://github.com/project-fifo/fqc.git", "883013e96408f98b29d016fa094b8ac7410c364e", [branch: "master"]},
+  "hdr_histogram": {:git, "https://github.com/HdrHistogram/hdr_histogram_erl.git", "46a4f86f3a9b72181859c2a30c8039c5d486248b", [tag: "0.3.2"]}}
