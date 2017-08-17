@@ -1,0 +1,44 @@
+rrdtool graph spinsleep_timeslice-10ms.svg \
+--width 600 \
+--height 200 \
+--start 00:00 \
+--end start+75seconds \
+--title 'spinsleep_timeslice-10ms' \
+--vertical-label 'scheduler usage' \
+--imgformat SVG \
+--border 0 \
+--font DEFAULT:0:Consolas \
+--upper-limit 8 \
+--lower-limit -8 \
+--rigid \
+'DEF:normal0=spinsleep_timeslice-10ms.rrd:normal:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:dirty0=spinsleep_timeslice-10ms.rrd:dirty:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:error=spinsleep_timeslice-10ms.rrd:error:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:1x10ms=spinsleep_timeslice-10ms.rrd:1x10ms:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:10x10ms=spinsleep_timeslice-10ms.rrd:10x10ms:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:100x10ms=spinsleep_timeslice-10ms.rrd:100x10ms:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:1000x10ms=spinsleep_timeslice-10ms.rrd:1000x10ms:MAX:start=1502829237:end=1502829312:step=1' \
+'DEF:10000x10ms=spinsleep_timeslice-10ms.rrd:10000x10ms:MAX:start=1502829237:end=1502829312:step=1' \
+'SHIFT:normal0:-52437' \
+'SHIFT:dirty0:-52437' \
+'SHIFT:error:-52437' \
+'SHIFT:1x10ms:-52437' \
+'SHIFT:10x10ms:-52437' \
+'SHIFT:100x10ms:-52437' \
+'SHIFT:1000x10ms:-52437' \
+'SHIFT:10000x10ms:-52437' \
+'CDEF:normal=normal0,100,/' \
+'CDEF:dirty=dirty0,100,/,-1,*' \
+'CDEF:ln1=normal,normal,UNKN,IF' \
+'CDEF:ln2=dirty,dirty,UNKN,IF' \
+'TICK:1x10ms#00000020:1:  1x' \
+'TICK:10x10ms#00000020:1:  10x' \
+'TICK:100x10ms#00000020:1:  100x' \
+'TICK:1000x10ms#00000020:1:  1000x' \
+'TICK:10000x10ms#00000020:1:  10000x' \
+'TICK:error#e60073a0:1:  Error' \
+'AREA:normal#48c4ec: Normal' \
+'AREA:dirty#54ec48: Dirty' \
+'LINE1:ln1#1598c3' \
+'LINE1:ln2#24bc14' \
+'HRULE:0#000000:dashes=3,5:dash-offset=5' 
