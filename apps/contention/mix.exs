@@ -49,6 +49,7 @@ defmodule Contention.Mixfile do
       {:cowboy, github: "ninenines/cowboy", ref: "2.0.0-rc.1", override: true},
       {:cowlib, github: "ninenines/cowlib", ref: "2.0.0-rc.1", override: true},
       {:elixir_make, "~> 0.4", runtime: false},
+      {:h2o, github: "potatosalad/erlang-h2o", ref: "178ae3f3515bb5f886847ca91b46194019d883e7"},
       {:ranch, "~> 1.4.0", override: true}
     ]
   end

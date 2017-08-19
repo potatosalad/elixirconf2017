@@ -1,4 +1,5 @@
 %{"cowboy": {:git, "https://github.com/ninenines/cowboy.git", "238ac3afc661046fb554a8bbb62d2b9912023247", [ref: "2.0.0-rc.1"]},
   "cowlib": {:git, "https://github.com/ninenines/cowlib.git", "11e07d3c2b164d06ad35188d83ad70e7501396db", [ref: "2.0.0-rc.1"]},
   "elixir_make": {:hex, :elixir_make, "0.4.0", "992f38fabe705bb45821a728f20914c554b276838433349d4f2341f7a687cddf", [:mix], [], "hexpm"},
+  "h2o": {:git, "https://github.com/potatosalad/erlang-h2o.git", "178ae3f3515bb5f886847ca91b46194019d883e7", [ref: "178ae3f3515bb5f886847ca91b46194019d883e7"]},
   "ranch": {:hex, :ranch, "1.4.0", "10272f95da79340fa7e8774ba7930b901713d272905d0012b06ca6d994f8826b", [:rebar3], [], "hexpm"}}

@@ -28,6 +28,7 @@ defmodule Contention.SchedulerUtilization do
   alias __MODULE__.State, as: State
 
   def init([]) do
+    :foo = :ets.new(:foo, [:named_table, :public, :set])
     _ = :erlang.system_flag(:scheduler_wall_time, true)
     state = start_interval(%State{ interval: @interval, prev_swt: scheduler_wall_time() })
     {:ok, state}

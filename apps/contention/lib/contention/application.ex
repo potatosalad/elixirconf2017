@@ -10,8 +10,9 @@ defmodule Contention.Application do
       # worker(Contention.SchedulerUsage, []),
       worker(Contention.SchedulerUtilization, []),
       event_manager(),
-      http_server(),
+      cowboy_server(),
     ]
+    children = h2o_server(children)
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
@@ -30,14 +31,15 @@ defmodule Contention.Application do
   end
 
   @doc false
-  defp http_server() do
+  defp cowboy_server() do
     dispatch = :cowboy_router.compile([{:_, [{:_, Contention.Handler, []}]}])
     ref = Contention.Handler.HTTP
     transport_options = [
       port: 29593
     ]
     protocol_options = %{
-      env: %{ dispatch: dispatch }
+      env: %{ dispatch: dispatch }#,
+      # stream_handlers: [Contention.StreamHandler]
     }
     {
       {:ranch_listener_sup, ref},
@@ -46,5 +48,14 @@ defmodule Contention.Application do
       ]},
       :permanent, :infinity, :supervisor, [:ranch_listener_sup]
     }
+  end
+
+  @doc false
+  defp h2o_server(child_specs) do
+    if Code.ensure_loaded?(:h2o) do
+      child_specs ++ [Contention.H2O.child_spec(Contention.H2O, 29594, Contention.H2O.Handler, [])]
+    else
+      child_specs
+    end
   end
 end
