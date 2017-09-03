@@ -21,10 +21,10 @@ erl_crash.dump
 *.o
 
 /c_src/env.mk
-/priv/contention_c_node
-/priv/contention_nif
-/priv/contention_port
-/priv/contention_prt
+/priv/select_c_node
+/priv/select_nif
+/priv/select_port
+/priv/select_prt
 /priv/*.dll
 /priv/*.dylib
 /priv/*.so
