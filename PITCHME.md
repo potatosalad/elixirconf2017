@@ -207,3 +207,291 @@ end
 +++
 
 ### &ldquo;Dirty NIF&rdquo; does not mean &ldquo;Faster NIF&rdquo;
+
+---
+
+## Yielding NIF (timeslice)
+
+> This approach is always preferred over the other alternatives.
+> 
+> <small>&mdash; [ERTS 9.0 erl_nif docs](http://erlang.org/doc/man/erl_nif.html#lengthy_work)</small>
+
+![Image](assets/down-arrow.png)
+
++++
+
+### Bogdan/Björn's<br>Erlang<br>Abstract<br>Machine
+
+<h1 class="fragment">BEAM</h1>
+
++++
+
+## BEAM Scheduling
+
+> The scheduler is responsible for the [soft] real-time guarantees of the system.
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++?image=https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/preemptive-scheduling.svg&size=contain
+
++++?image=https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/cooperative-scheduling.svg&size=contain
+
++++
+
+## BEAM Scheduling
+
+> One can describe the scheduling in BEAM as preemptive scheduling on top of cooperative scheduling.
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++
+
+## Preemptive vs Cooperative
+
+<ul>
+<li class="fragment">Elixir functions are preemptive</li>
+<li class="fragment">C functions are cooperative<span class="fragment">&hellip;hopefully</span></li>
+</ul>
+
++++
+
+# Elixir Functions
+
++++
+
+> A process can only be suspended at certain points of the execution, such as at a receive or a function call.
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++
+
+## Estimating Time
+
+> When a process is scheduled it will get a number of reductions defined by `CONTEXT_REDS` (currently 4000).
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++
+
+## What is a Reduction?
+
+> It is not completely defined what a reduction is, but at least each function call should be counted as a reduction.
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++
+
+```elixir
+def echo(term) do
+  term
+end
+```
+
++++
+
+```elixir
+self = :erlang.self()
+{:reductions, r1} = :erlang.process_info(self, :reductions)
+:ok = echo(:ok)
+{:reductions, r2} = :erlang.process_info(self, :reductions)
+rdiff = r2 - r1 # ~400
+```
+
++++
+
+```elixir
+def collect(_ref, 0, replies) do
+  replies
+end
+def collect(ref, n, replies) do
+  receive do
+    {^ref, reply} ->
+      collect(ref, n - 1, [reply | replies])
+  end
+end
+```
+
+<span class="fragment current-only" data-code-focus="1,4">suspend caller of `collect/3`</span>
+<span class="fragment current-only" data-code-focus="5">suspend on receive</span>
+<span class="fragment current-only" data-code-focus="7">suspend on call to `collect/3`</span>
+<span class="fragment current-only" data-code-focus="1-9">at least 3 preemption points</span>
+
++++
+
+```elixir
+parent = self()
+ref = make_ref()
+:ok =
+  Enum.reduce(1..1000, :ok, fn (_, ok) ->
+    _ = spawn(:erlang, :send, [parent, {ref, 1}])
+    ok
+  end)
+{:reductions, r1} = :erlang.process_info(parent, :reductions)
+replies = collect(ref, 1000, [])
+{:reductions, r2} = :erlang.process_info(parent, :reductions)
+1000 = Enum.sum(replies)
+rdiff = r2 - r1 # ~1400
+```
+
++++
+
+# C Functions
+
++++
+
+> There is a risk that a function implemented in C takes many more clock cycles per reduction than a normal Erlang function.
+> 
+> <small>&mdash; [The BEAM Book](https://happi.github.io/theBeamBook/)</small>
+
++++
+
+```c
+nif_bif_result = (*fp)(&env, bif_nif_arity, reg);
+```
+
+<small>[`erts/emulator/beam/bif_instrs.tab`](https://github.com/erlang/otp/blob/81a6adab693a75f89bc87911ac23a21308673d2d/erts/emulator/beam/bif_instrs.tab#L434-L438)</small>
+
+<span class="fragment">blocks thread until the NIF returns</span>
+
++++
+
+```c
+static ERL_NIF_TERM
+echo(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
+{
+  return argv[0];
+}
+```
+
++++
+
+```elixir
+self = :erlang.self()
+{:reductions, r1} = :erlang.process_info(self, :reductions)
+:ok = :my_nif.echo(:ok)
+{:reductions, r2} = :erlang.process_info(self, :reductions)
+rdiff = r2 - r1 # ~200
+```
+
++++
+
+```c
+static ERL_NIF_TERM
+echo(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
+{
+  (void) spinsleep(1000 * 1000); // spin for 1 second
+  return argv[0];
+}
+```
+
+<span class="fragment">reductions = <code>~200</code></span>
+
++++
+
+### `enif_consume_timeslice`
+
++++
+
+```c
+static ERL_NIF_TERM
+echo(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
+{
+  (void) enif_consume_timeslice(env, 100);
+  return argv[0];
+}
+```
+
+<span class="fragment">reductions = <code>~4200</code></span>
+
++++
+
+```c
+if (microseconds > 1000) {
+  ERL_NIF_TERM newargv[1];
+  newargv[0] = enif_make_int64(env, (ErlNifSInt64) start);
+  newargv[1] = enif_make_int64(env, (ErlNifSInt64) stop);
+  newargv[2] = enif_make_int64(env, 1000 * 1000);
+  return enif_schedule_nif(env, "spinsleep_timeslice", 0,
+                           spinsleep_ts, 3, newargv);
+}
+```
+
+<span class="fragment current-only" data-code-focus="5">`max_per_slice`</span>
+<span class="fragment current-only" data-code-focus="1-8"></span>
+
++++
+
+```c
+static ERL_NIF_TERM
+spinsleep_ts(ErlNifEnv *env, int argc, const ERL_NIF_TERM argv[])
+{
+  ErlNifTime start, stop, current;
+  ErlNifSInt64 max_per_slice, offset = 0;
+  int percent, total = 0;
+  if (argc != 3
+      || !enif_get_int64(env, argv[0], &start)
+      || !enif_get_int64(env, argv[1], &stop)
+      || !enif_get_int64(env, argv[2], &max_per_slice)) {
+    return enif_make_badarg(env);
+  }
+  // ...
+}
+```
+
++++
+
+```c
+current = enif_monotonic_time(ERL_NIF_NSEC);
+while (stop > current) {
+  (void)spin(max_per_slice);
+  offset += max_per_slice;
+  diff = enif_monotonic_time(ERL_NIF_NSEC) - current;
+  current += diff;
+  percent = (int)(diff / 1000 / 1000);
+  total += percent;
+  if (enif_consume_timeslice(env, percent)) {
+    // ...
+  }
+}
+return enif_make_int64(env, (current - start) / 1000);
+```
+
++++
+
+```c
+max_per_slice = offset;
+if (total > 100) {
+  int m = (int)(total / 100);
+  if (m == 1) {
+    max_per_slice -= (max_per_slice * (total - 100) / 100);
+  } else {
+    max_per_slice = (max_per_slice / m);
+  }
+}
+ERL_NIF_TERM newargv[1];
+newargv[0] = argv[0]; // start
+newargv[1] = argv[1]; // stop
+newargv[2] = enif_make_int64(env, max_per_slice);
+return enif_schedule_nif(env, "spinsleep_timeslice", 0,
+                         spinsleep_ts, 3, newargv);
+```
+
++++
+
+![spinsleep_timeslice-1ms](assets/idle/spinsleep_timeslice-1ms.svg)
+
++++
+
+![spinsleep_timeslice-10ms](assets/idle/spinsleep_timeslice-10ms.svg)
+
++++
+
+![spinsleep_timeslice-100ms](assets/idle/spinsleep_timeslice-100ms.svg)
+
++++
+
+![spinsleep_timeslice-1s](assets/idle/spinsleep_timeslice-1s.svg)
+
++++
+
+![spinsleep_timeslice-10s](assets/idle/spinsleep_timeslice-10s.svg)
