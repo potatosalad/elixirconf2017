@@ -478,20 +478,20 @@ return enif_schedule_nif(env, "spinsleep_timeslice", 0,
 
 +++
 
-![spinsleep_timeslice-1ms](assets/idle/spinsleep_timeslice-1ms.svg)
+![spinsleep_timeslice-1ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-1ms.svg)
 
 +++
 
-![spinsleep_timeslice-10ms](assets/idle/spinsleep_timeslice-10ms.svg)
+![spinsleep_timeslice-10ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-10ms.svg)
 
 +++
 
-![spinsleep_timeslice-100ms](assets/idle/spinsleep_timeslice-100ms.svg)
+![spinsleep_timeslice-100ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-100ms.svg)
 
 +++
 
-![spinsleep_timeslice-1s](assets/idle/spinsleep_timeslice-1s.svg)
+![spinsleep_timeslice-1s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-1s.svg)
 
 +++
 
-![spinsleep_timeslice-10s](assets/idle/spinsleep_timeslice-10s.svg)
+![spinsleep_timeslice-10s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-10s.svg)
