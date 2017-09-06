@@ -1,6 +1,8 @@
 # Well-Behaved Native Implemented Functions for Elixir
 ### ElixirConf 2017 &mdash; 5-8 September, 2017 &mdash; Bellevue, Washington
 
+[![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/potatosalad/elixirconf2017/master?grs=github&t=white)
+
 This repository contains the sources used for the [&ldquo;Well-Behaved Native Implemented Functions for Elixir&rdquo;](https://web.archive.org/web/20170903202036/https://elixirconf.com/speakers#andrew_bennett) presentation given on Friday, September 8, 2017 in Bellevue, Washington.
 
 ### Resources
