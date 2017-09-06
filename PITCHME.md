@@ -495,3 +495,279 @@ return enif_schedule_nif(env, "spinsleep_timeslice", 0,
 +++
 
 ![spinsleep_timeslice-10s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice-10s.svg)
+
++++
+
+<a href="https://www.youtube.com/watch?v=tBAM_N9qPno"><img src="https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/lukas-larsson-bad-nifs.png" alt="lukas-larsson-bad-nifs" height="500"></a>
+
+<a href="https://www.youtube.com/watch?v=tBAM_N9qPno">youtu.be/tBAM_N9qPno</a>
+
+---
+
+## Yielding Dirty NIF
+
+> This isn't really mentioned in the documentation.
+> 
+> <small>&mdash; Me</small>
+
+![Image](assets/down-arrow.png)
+
++++
+
+```c
+return enif_schedule_nif(env, "spinsleep_timeslice_dirty",
+                         ERL_NIF_DIRTY_JOB_CPU_BOUND,
+                         spinsleep_tsd, 3, newargv);
+```
+
++++
+
+![spinsleep_timeslice_dirty-1ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-1ms.svg)
+
++++
+
+![spinsleep_timeslice_dirty-10ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-10ms.svg)
+
++++
+
+![spinsleep_timeslice_dirty-100ms](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-100ms.svg)
+
++++
+
+![spinsleep_timeslice_dirty-1s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-1s.svg)
+
++++
+
+![spinsleep_timeslice_dirty-10s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-10s.svg)
+
++++
+
+![spinsleep_timeslice_dirty-100s](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/idle/spinsleep_timeslice_dirty-100s.svg)
+
+---?image=assets/idle-summary.png&size=contain
+
++++
+
+### <code>1 millisecond</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Normal</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+15s</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+10s</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
+
++++
+
+### <code>10 milliseconds</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Normal</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+10s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+2m</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+10s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+2m</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
+
++++
+
+### <code>100 milliseconds</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Normal</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+15s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+30s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+2m</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+16m</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+15s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+30s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+2m</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+16m</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
+
++++
+
+### <code>1 second</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+2s</code></td>
+    <td style="background-color: #ffc; text-align: right;"><code>+3s</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
+
++++
+
+### <code>10 seconds</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding</td>
+    <td style="background-color: #fcc; text-align: right;"><code>+1s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+2s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+5s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+10s</code></td>
+    <td style="background-color: #fcc; text-align: right;"><code>+15s</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
+
++++
+
+### <code>100 seconds</code>
+
+<table>
+  <tr>
+    <td style="text-align: right;"><code></code></td>
+    <td style="text-align: right;"><code>1x</code></td>
+    <td style="text-align: right;"><code>10x</code></td>
+    <td style="text-align: right;"><code>100x</code></td>
+    <td style="text-align: right;"><code>1000x</code></td>
+    <td style="text-align: right;"><code>10000x</code></td>
+  </tr>
+  <tr>
+    <td style="text-align: left;">Yielding Dirty</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+    <td style="background-color: #cfc;">&nbsp;</td>
+  </tr>
+</table>
