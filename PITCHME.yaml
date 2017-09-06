@@ -1,1 +1,3 @@
-theme: simple
+theme: white
+theme-override: assets/css/simple.css
+transition: none
