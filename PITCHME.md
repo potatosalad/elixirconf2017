@@ -771,3 +771,225 @@ return enif_schedule_nif(env, "spinsleep_timeslice_dirty",
     <td style="background-color: #cfc;">&nbsp;</td>
   </tr>
 </table>
+
+---
+
+## Recommendations
+
+<table>
+  <tr>
+    <th>Duration</th>
+    <th>NIF Type</th>
+  </tr>
+  <tr>
+    <td><code>&lt; 1ms</code></td>
+    <td>Normal</td>
+  </tr>
+  <tr class="fragment">
+    <td><code>&lt; 100ms</code></td>
+    <td>Yielding</td>
+  </tr>
+  <tr class="fragment">
+    <td><code>&ge; 100ms</code></td>
+    <td>Yielding Dirty</td>
+  </tr>
+</table>
+
+---
+
+# Real World
+# Effects
+
+---
+
+## Load Testing cowboy 2 (HTTP/2)
+
+![h2-baseline.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-baseline.1.svg)
+
+---?image=assets/h2-load.png&size=contain
+
++++
+
+## Normal NIF
+#### cowboy 2 (HTTP/2) with 1ms
+
+![h2-spinsleep-1ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep-1ms.1.svg)
+
++++
+
+## Normal NIF
+#### cowboy 2 (HTTP/2) with 10ms
+
+![h2-spinsleep-10ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep-10ms.1.svg)
+
++++
+
+## Normal NIF
+#### cowboy 2 (HTTP/2) with 100ms
+
+![h2-spinsleep-100ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep-100ms.1.svg)
+
++++
+
+## Dirty NIF
+#### cowboy 2 (HTTP/2) with 1ms
+
+![h2-spinsleep_dirty-1ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_dirty-1ms.1.svg)
+
++++
+
+## Dirty NIF
+#### cowboy 2 (HTTP/2) with 10ms
+
+![h2-spinsleep_dirty-10ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_dirty-10ms.1.svg)
+
++++
+
+## Dirty NIF
+#### cowboy 2 (HTTP/2) with 100ms
+
+![h2-spinsleep_dirty-100ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_dirty-100ms.1.svg)
+
++++
+
+## Yielding NIF
+#### cowboy 2 (HTTP/2) with 1ms
+
+![h2-spinsleep_timeslice-1ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice-1ms.1.svg)
+
++++
+
+## Yielding NIF
+#### cowboy 2 (HTTP/2) with 10ms
+
+![h2-spinsleep_timeslice-10ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice-10ms.1.svg)
+
++++
+
+## Yielding NIF
+#### cowboy 2 (HTTP/2) with 100ms
+
+![h2-spinsleep_timeslice-100ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice-100ms.1.svg)
+
++++
+
+## Yielding NIF
+#### cowboy 2 (HTTP/2) with 1s
+
+![h2-spinsleep_timeslice-1s.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice-1s.1.svg)
+
++++
+
+## Yielding NIF
+#### cowboy 2 (HTTP/2) with 10s
+
+![h2-spinsleep_timeslice-10s.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice-10s.1.svg)
+
++++
+
+## Yielding Dirty NIF
+#### cowboy 2 (HTTP/2) with 1ms
+
+![h2-spinsleep_timeslice_dirty-1ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice_dirty-1ms.1.svg)
+
++++
+
+## Yielding Dirty NIF
+#### cowboy 2 (HTTP/2) with 10ms
+
+![h2-spinsleep_timeslice_dirty-10ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice_dirty-10ms.1.svg)
+
++++
+
+## Yielding Dirty NIF
+#### cowboy 2 (HTTP/2) with 100ms
+
+![h2-spinsleep_timeslice_dirty-100ms.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice_dirty-100ms.1.svg)
+
++++
+
+## Yielding Dirty NIF
+#### cowboy 2 (HTTP/2) with 1s
+
+![h2-spinsleep_timeslice_dirty-1s.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice_dirty-1s.1.svg)
+
++++
+
+## Yielding Dirty NIF
+#### cowboy 2 (HTTP/2) with 10s
+
+![h2-spinsleep_timeslice_dirty-10s.1](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/load/h2-spinsleep_timeslice_dirty-10s.1.svg)
+
+---
+
+### Examples in OTP
+
+### <a href="https://github.com/erlang/otp/blob/OTP-20.0.4/lib/crypto/c_src/crypto.c"><code>crypto.c</code></a>
+
+<ul>
+  <li class="fragment">NIF timeslice examples</li>
+  <li class="fragment">One dirty example: <code>crypto:rsa_generate_key_nif/2</code></li>
+</ul>
+
+---
+
+### Examples in OTP
+
+### <a href="https://github.com/potatosalad/otp/blob/binary_find_bif_improved/erts/emulator/beam/erl_bif_binary.c"><code>erl_bif_binary.c</code></a>
+
+<ul>
+  <li class="fragment">BIF timeslice examples
+    <ul>
+      <li><code>binary:match/2,3</code></li>
+      <li><code>binary:matches/2,3</code></li>
+      <li><code>binary:split/2,3</code></li>
+    </ul>
+  </li>
+  <li class="fragment">More in [#1480](https://github.com/erlang/otp/pull/1480)</li>
+</ul>
+
+---
+
+## NIF features in OTP-20
+
+* Magic references instead of magic binaries
+* `enif_whereis_pid`
+* `enif_monitor_process`
+* `enif_select`
+
+---
+
+##### (possible)
+### Network I/O Replacement
+
+### <a href="https://github.com/potatosalad/elixirconf2017/blob/master/apps/select/c_src/sverk_tcp/sverk_tcp_nif.c"><code>sverk_tcp_nif.c</code></a>
+
+<ul>
+  <li class="fragment">Example by Sverker Eriksson</li>
+  <li class="fragment">Uses <code>enif_select</code></li>
+  <li class="fragment">NIF I/O Queue API: [#1364](https://github.com/erlang/otp/pull/1364)</li>
+</ul>
+
+---
+
+##### (possible)
+### TTY Replacement
+
+### <a href="https://github.com/sverker/otp/blob/sverker/enif_select-examples/erts/emulator/nifs/unix/ttsl_nif.c"><code>ttsl_nif.c</code></a>
+
+<ul>
+  <li class="fragment">Example by Sverker Eriksson</li>
+  <li class="fragment">Uses <code>enif_select</code></li>
+</ul>
+
+---
+
+### Fun with Threaded NIFs
+
+![cowboy-1.1.2-vs-cowboy-2.0.0-rc.1-vs-h2o-2.2.0](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/cowboy-1.1.2-vs-cowboy-2.0.0-rc.1-vs-h2o-2.2.0.svg)
+
+<small><a href="https://potatosalad.io/2017/08/20/load-testing-cowboy-2-0-0-rc-1">potatosalad.io/2017/08/20/load-testing-cowboy-2-0-0-rc-1</a></small>
+
+---
+
+### <a href="https://github.com/potatosalad/elixirconf2017" style="color: black;"><img src="https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/github-mark.svg" width="60" height="60" border="0" style="border: none; box-shadow: none; margin: 0; padding: 0;"> potatosalad/elixirconf2017</a>
