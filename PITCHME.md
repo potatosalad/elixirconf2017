@@ -17,10 +17,7 @@
 #### <a href="https://github.com/potatosalad" style="color: black;"><img src="https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/github-mark.svg" width="40" height="40" border="0" style="border: none; box-shadow: none; margin: 0; padding: 0;"> potatosalad</a>
 #### <a href="https://twitter.com/potatosaladx" style="color: black;"><img src="https://cdn.rawgit.com/potatosalad/elixirconf2017/master/assets/twitter-mark.gif" width="40" height="40" border="0" style="border: none; box-shadow: none; margin: 0; padding: 0;"> potatosaladx</a>
 
-![Image](assets/down-arrow.png)
-
-Note:
-I'm going to show you 3 graphs that measure scheduler utilization while running a series of blocking NIF calls for a specific period of time and specific concurrency multiplier.  On this machine, there are 8 normal schedulers and 8 dirty schedulers.  So a 1x concurrency multiplier means that 8 NIF calls were made close to the same time.  When all 8 schedulers are saturated, everything else in the VM comes to a halt as things are queued and waiting for these blocking NIF calls to finish.  The area of the chart in pink or red signifies a period of time when the VM was unresponsive.  This means that little to no timers are firing, no code other than the blocking NIFs are really being given the chance to run.
+![↓](assets/down-arrow.png)
 
 +++
 
@@ -34,7 +31,7 @@ I'm going to show you 3 graphs that measure scheduler utilization while running 
 > 
 > <small>&mdash; [OTP-R13B03 announcement (25 Nov 2009)](http://www.erlang.org/news/32)</small>
 
-![Image](assets/down-arrow.png)
+![↓](assets/down-arrow.png)
 
 +++
 
@@ -78,7 +75,7 @@ I'm going to show you 3 graphs that measure scheduler utilization while running 
 > 
 > <small>&mdash; [ERTS 9.0 erl_nif docs](http://erlang.org/doc/man/erl_nif.html#lengthy_work)</small>
 
-![Image](assets/down-arrow.png)
+![↓](assets/down-arrow.png)
 
 +++
 
@@ -182,7 +179,7 @@ end
 > 
 > <small>&mdash; [ERTS 9.0 erl_nif docs](http://erlang.org/doc/man/erl_nif.html#lengthy_work)</small>
 
-![Image](assets/down-arrow.png)
+![↓](assets/down-arrow.png)
 
 +++
 
@@ -219,7 +216,7 @@ end
 > 
 > <small>&mdash; [ERTS 9.0 erl_nif docs](http://erlang.org/doc/man/erl_nif.html#lengthy_work)</small>
 
-![Image](assets/down-arrow.png)
+![↓](assets/down-arrow.png)
 
 +++
 
@@ -513,7 +510,7 @@ return enif_schedule_nif(env, "spinsleep_timeslice", 0,
 > 
 > <small>&mdash; Me</small>
 
-![Image](assets/down-arrow.png)
+![↓](assets/down-arrow.png)
 
 +++
 
