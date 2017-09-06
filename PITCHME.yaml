@@ -1,7 +1,7 @@
 footnote: >
-  <a href="https://github.com/potatosalad/elixirconf2017" target="_blank">
-    <span class="octicon octicon-mark-github" style="font-size:0.9em; color: black"></span>
-    <span style="color:black; font-size:0.8em; font-family: Source Sans Pro, Helvetica, sans-serif;">potatosalad / elixirconf2017</span>
+  <a href="https://github.com/potatosalad/elixirconf2017" style="color: black; text-decoration: none;" target="_blank">
+    <span class="octicon octicon-mark-github"></span>
+    <span>potatosalad / elixirconf2017</span>
   </a>
 highlight: github
 theme: white
