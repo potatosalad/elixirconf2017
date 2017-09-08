@@ -3,7 +3,13 @@
 
 [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/potatosalad/elixirconf2017/master?grs=github&t=white)
 
-This repository contains the sources used for the [&ldquo;Well-Behaved Native Implemented Functions for Elixir&rdquo;](https://web.archive.org/web/20170903202036/https://elixirconf.com/speakers#andrew_bennett) presentation given on Friday, September 8, 2017 in Bellevue, Washington.
+This repository contains the sources used for the [&ldquo;Well-Behaved Native Implemented Functions for Elixir&rdquo;](https://web.archive.org/web/20170903202036/https://elixirconf.com/speakers#andrew_bennett) presentation given at ElixirConf 2017 on Friday, September 8, 2017 in Bellevue, Washington.
+
+There is a post-talk discussion thread available on Elixir Forum: [elixirforum.com/t/post-talk-discussion-well-behaved-native-implemented-functions-for-elixir/8472](https://elixirforum.com/t/post-talk-discussion-well-behaved-native-implemented-functions-for-elixir/8472)
+
+Feel free to [file an issue](https://github.com/potatosalad/elixirconf2017/issues) to this repository if you have any questions related to the talk.
+
+The presentation slides are available at [gitpitch.com/potatosalad/elixirconf2017](https://gitpitch.com/potatosalad/elixirconf2017) and as [a PDF](https://cdn.rawgit.com/potatosalad/elixirconf2017/master/presentation.pdf).
 
 ### Resources
 
@@ -22,6 +28,7 @@ This repository contains the sources used for the [&ldquo;Well-Behaved Native Im
 ##### BEAM Related
 
  * [The BEAM Book](https://happi.github.io/theBeamBook/)
+ * [Hamidreza Soleimani - Erlang Scheduler Details and Why It Matters](https://hamidreza-s.github.io/erlang/scheduling/real-time/preemptive/migration/2016/02/09/erlang-scheduler-details.html)
  * [Lukas Larsson - Understanding the Erlang Scheduler](https://www.youtube.com/watch?v=tBAM_N9qPno)
  * [Lukas Larsson - Lambda Days - Scheduling in the Erlang VM](https://www.youtube.com/watch?v=_i0AscBx3vk)
  * [Robert Virding - Hitchhiker's Tour of the BEAM](https://www.youtube.com/watch?v=_Pwlvy3zz9M)

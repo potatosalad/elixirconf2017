@@ -1,5 +1,9 @@
 %{"cowboy": {:git, "https://github.com/ninenines/cowboy.git", "238ac3afc661046fb554a8bbb62d2b9912023247", [ref: "2.0.0-rc.1"]},
   "cowlib": {:git, "https://github.com/ninenines/cowlib.git", "11e07d3c2b164d06ad35188d83ad70e7501396db", [ref: "2.0.0-rc.1"]},
+  "edown": {:git, "https://github.com/uwiger/edown.git", "754be25f71a04099c83f3ffdff268e70beeb0021", [branch: "master"]},
   "elixir_make": {:hex, :elixir_make, "0.4.0", "992f38fabe705bb45821a728f20914c554b276838433349d4f2341f7a687cddf", [:mix], [], "hexpm"},
+  "fqc": {:git, "https://github.com/project-fifo/fqc.git", "883013e96408f98b29d016fa094b8ac7410c364e", [branch: "master"]},
   "h2o": {:git, "https://github.com/potatosalad/erlang-h2o.git", "178ae3f3515bb5f886847ca91b46194019d883e7", [ref: "178ae3f3515bb5f886847ca91b46194019d883e7"]},
+  "hdr_histogram": {:git, "https://github.com/HdrHistogram/hdr_histogram_erl.git", "46a4f86f3a9b72181859c2a30c8039c5d486248b", [tag: "0.3.2"]},
+  "ojson": {:hex, :ojson, "1.0.0", "fd28614eadaec00a15cdb2f53f29d8717a812a508ddb80d202f2f2e2aaeabbcc", [], [], "hexpm"},
   "ranch": {:hex, :ranch, "1.4.0", "10272f95da79340fa7e8774ba7930b901713d272905d0012b06ca6d994f8826b", [:rebar3], [], "hexpm"}}
