@@ -24,6 +24,9 @@ The presentation slides are available at [gitpitch.com/potatosalad/elixirconf201
    * [vinoski/bitwise](https://github.com/vinoski/bitwise)
  * [Julian Squires - Erlang Factory SF 2016 - What If Your NIF Goes Adrift](https://www.youtube.com/watch?v=5Qkqs2oNboA)
    * [tokenrove/niffy](https://github.com/tokenrove/niffy)
+ * Sverker Eriksson's `enif_select` examples
+   * [`sverk_tcp_nif.c`](https://github.com/potatosalad/elixirconf2017/blob/master/apps/select/c_src/sverk_tcp/sverk_tcp_nif.c)
+   * [`ttsl_nif.c`](https://github.com/sverker/otp/blob/sverker/enif_select-examples/erts/emulator/nifs/unix/ttsl_nif.c)
 
 ##### BEAM Related
 
