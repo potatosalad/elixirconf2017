@@ -1,8 +1,4 @@
-footnote: >
-  <a href="https://github.com/potatosalad/elixirconf2017" style="color: black; text-decoration: none;" target="_blank">
-    <span class="octicon octicon-mark-github"></span>
-    <span>potatosalad / elixirconf2017</span>
-  </a>
+footnote: '<a class=\"git-octicon\" href=\"https://github.com/potatosalad/elixirconf2017\" style=\"color: black; text-decoration: none;\" target=\"_blank\"><span class=\"octicon octicon-mark-github\"></span>&nbsp;<span>potatosalad / elixirconf2017</span></a>'
 gatoken: UA-73459380-2
 highlight: github
 theme: white
