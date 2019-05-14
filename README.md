@@ -3,6 +3,10 @@
 
 [![GitPitch](https://gitpitch.com/assets/badge.svg)](https://gitpitch.com/potatosalad/elixirconf2017/master?grs=github&t=white)
 
+<a href="http://www.youtube.com/watch?feature=player_embedded&v=FYQcn9zcZVA
+" target="_blank"><img src="http://img.youtube.com/vi/FYQcn9zcZVA/0.jpg" 
+alt="YouTube: ElixirConf 2017 - Well Behaved Native Implemented Functions for Elixir - Andrew Bennett" width="240" height="180" border="10" /><br><small>YouTube: ElixirConf 2017 - Well Behaved Native Implemented Functions for Elixir - Andrew Bennett</small></a>
+
 This repository contains the sources used for the [&ldquo;Well-Behaved Native Implemented Functions for Elixir&rdquo;](https://web.archive.org/web/20170903202036/https://elixirconf.com/speakers#andrew_bennett) presentation given at ElixirConf 2017 on Friday, September 8, 2017 in Bellevue, Washington.
 
 There is a post-talk discussion thread available on Elixir Forum: [elixirforum.com/t/post-talk-discussion-well-behaved-native-implemented-functions-for-elixir/8472](https://elixirforum.com/t/post-talk-discussion-well-behaved-native-implemented-functions-for-elixir/8472)
